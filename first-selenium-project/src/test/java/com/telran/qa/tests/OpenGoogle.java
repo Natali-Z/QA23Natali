@@ -17,19 +17,32 @@ public void setUp(){
      wd.get("https://www.google.com/");
 }
 @Test
-public void testOpenGoogle() throws InterruptedException {
+public void testOpenGoogle()  {
 
-     wd.findElement(By.className("gb_D")).click();
-     wd.findElement(By.className("gb_D")).click();
-     Thread.sleep(3000);
+    click(By.className("gb_D"));
+    click(By.className("gb_D"));
+
 }
 
-    @Test
-    public void testSearchGoogle(){
+    private void click(By locator) {
+        wd.findElement(locator).click();
+    }
 
-        wd.findElement(By.name("q")).click();
+
+    @Test
+    public void testSearchGoogle() throws InterruptedException {
+
+        click(By.name("q"));
         wd.findElement(By.name("q")).clear();
         wd.findElement(By.name("q")).sendKeys("Java");
+        Thread.sleep(5000);
+    }
+    @Test
+    public void testOpenProfile() throws InterruptedException {
+
+        click(By.id("gb_70"));
+
+        Thread.sleep(5000);
     }
 @AfterClass
 public void tearDown(){
