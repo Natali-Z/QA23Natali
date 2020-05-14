@@ -3,6 +3,7 @@ package com.telran.qa.tests;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -11,38 +12,55 @@ import java.util.concurrent.TimeUnit;
 
 public class JiraLogin {
 
-    WebDriver wd;
+  WebDriver wd;
 
-    @BeforeClass
-    public void setup() {
+  @BeforeClass
+  public void setup() {
 
-        wd = new ChromeDriver();
-        wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        wd.manage().window().maximize();
+    wd = new ChromeDriver();
+    wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    wd.manage().window().maximize();
 
-      //  wd.get("http://jira.tel-ran.net/secure/Dashboard.jspa");
-        wd.navigate().to("http://jira.tel-ran.net/secure/Dashboard.jspa");
-    }
+    //  wd.get("http://jira.tel-ran.net/secure/Dashboard.jspa");
+    wd.navigate().to("http://jira.tel-ran.net/secure/Dashboard.jspa");
+  }
 
-@Test
-    public void testJiraLogin() throws InterruptedException {
+  @Test
+  public void testJiraLogin() throws InterruptedException {
 
-        wd.findElement(By.name("os_username")).click();
-        wd.findElement(By.name("os_username")).clear();
-        wd.findElement(By.name("os_username")).sendKeys("Natali");
+    type(By.name("os_username"), "Natali");
+    type(By.name("os_password"), "225656565");
 
-        wd.findElement(By.name("os_password")).click();
-        wd.findElement(By.name("os_password")).clear();
-        wd.findElement(By.name("os_password")).sendKeys("225656565");
+    Thread.sleep(3000);
 
-      Thread.sleep(3000);
+    click(By.id("login"));
 
-        wd.findElement(By.id("login")).click();
+    Assert.assertTrue(isElementPresent(By.id("usernameerror")));
 
-    }
-        @AfterClass
-                public void tearDown(){
-    wd.quit();
-        }
-    }
+    String errorMessage = wd.findElement(By.id("usernameerror")).getText();
+
+    Assert.assertEquals(errorMessage, "Sorry, your username and password are incorrect - please try again.");
+  }
+
+  public void type(By locator, String text) {
+    click(locator);
+    wd.findElement(locator).clear();
+    wd.findElement(locator).sendKeys(text);
+  }
+
+  private void click(By username) {
+    wd.findElement(username).click();
+  }
+
+  public boolean isElementPresent(By locator) {
+
+    return wd.findElements(locator).size() > 0;
+    
+  }
+
+  @AfterClass
+  public void tearDown() {
+    // wd.quit();
+  }
+}
 
