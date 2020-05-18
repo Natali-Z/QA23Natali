@@ -13,7 +13,7 @@ WebDriver wd;
 @BeforeClass
 public void setUp(){
      wd = new ChromeDriver();
-     wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+     wd.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
      wd.get("https://www.google.com/");
 }
 @Test
@@ -24,27 +24,27 @@ public void testOpenGoogle()  {
 
 }
 
-    private void click(By locator) {
+    private void click(By locator)
+    {
         wd.findElement(locator).click();
     }
-
-
     @Test
     public void testSearchGoogle() throws InterruptedException {
 
         click(By.name("q"));
         wd.findElement(By.name("q")).clear();
-        wd.findElement(By.name("q")).sendKeys("Java");
-        Thread.sleep(5000);
+        wd.findElement(By.name ("q")).sendKeys("Java");
+
+        Thread.sleep(9000);
     }
     @Test
     public void testOpenProfile() throws InterruptedException {
 
         click(By.id("gb_70"));
 
-        Thread.sleep(5000);
+        Thread.sleep(7000);
     }
-@AfterClass
+ @AfterClass
 public void tearDown(){
   wd.quit();
 
